@@ -1,0 +1,26 @@
+name: Daily Commit
+
+on:
+  schedule:
+    - cron: "0 5 * * *" # 00:00 hora Colombia todos los días
+  workflow_dispatch: # Permite ejecutarlo manualmente si quieres probarlo
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: Actualizar archivo con la fecha
+        run: |
+          echo "Última actualización: $(date)" >> actividad.txt
+          git add actividad.txt
+          git commit -m "Commit automático $(date)"
+          git push
