@@ -2,8 +2,11 @@ name: Daily Commit
 
 on:
   schedule:
-    - cron: "0 5 * * *" # 00:00 hora Colombia todos los días
-  workflow_dispatch: # Permite ejecutarlo manualmente si quieres probarlo
+    - cron: "0 5 * * *" # 00:00 hora Colombia (05:00 UTC)
+  workflow_dispatch: # Permite ejecutarlo manualmente
+
+permissions:
+  contents: write # Da permiso al bot para hacer push
 
 jobs:
   update:
@@ -18,9 +21,9 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
 
-      - name: Actualizar archivo con la fecha
+      - name: Actualizar archivo con la fecha y hora
         run: |
           echo "Última actualización: $(date)" >> actividad.txt
           git add actividad.txt
-          git commit -m "Commit automático $(date)"
+          git commit -m "Commit automático $(date)" || echo "No hay cambios para commitear"
           git push
