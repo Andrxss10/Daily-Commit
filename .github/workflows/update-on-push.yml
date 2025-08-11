@@ -1,0 +1,29 @@
+name: Update on Push
+
+on:
+  push:
+    branches:
+      - main  # Cambia si tu rama principal tiene otro nombre
+
+permissions:
+  contents: write
+
+jobs:
+  update-on-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: Registrar fecha y hora de modificación manual
+        run: |
+          echo "📅 Modificación manual detectada: $(date)" >> actividad.txt
+          git add actividad.txt
+          git commit -m "Registro automático: modificación manual el $(date)"
+          git push
