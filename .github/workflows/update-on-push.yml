@@ -21,9 +21,9 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
 
-      - name: Registrar fecha y hora de modificación manual
+      - name: Registrar fecha, hora y usuario del push
         run: |
-          echo "📅 Modificación manual detectada: $(date)" >> actividad.txt
+          echo "📅 Modificación manual detectada por ${{ github.actor }}: $(date)" >> actividad.txt
           git add actividad.txt
-          git commit -m "Registro automático: modificación manual el $(date)"
+          git commit -m "Registro: ${{ github.actor }} modificó el repositorio el $(date)"
           git push
